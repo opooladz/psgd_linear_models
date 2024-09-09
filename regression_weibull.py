@@ -73,7 +73,7 @@ smallLinear = linearRegression(d)
 smallLinear.to_device(device)  # Move model to the appropriate device
 # torch.nn.init.normal_(smallLinear.linear.weight, mean=0, std=0.01)
 torch.nn.init.orthogonal_(smallLinear.linear.weight, gain=1)
-num_epochs = 200_000
+num_epochs = 2_000_000
 ###### SGD ######
 print("Starting SGD")
 print("-"*10)
@@ -139,13 +139,12 @@ for epoch in range(num_epochs):
     if epoch % 10_000 == 0:
         print(f'Epoch {epoch}: Loss = {loss.item()}')
         psgd_mse.append(loss.detach().cpu().item())
-    optimizer.lr_params *= (0.1) ** (1 / (num_epochs-1))
-    optimizer.lr_preconditioner *= (0.1) ** (1 / (num_epochs-1))
+    optimizer.lr_params *= (0.1) ** (1 / (num_epochs//100-1))
+    optimizer.lr_preconditioner *= (0.1) ** (1 / (num_epochs//100-1))
 
 print('Training complete')
 
 #%%
-
 sns.set_theme(style="darkgrid", palette="muted")
 # Create subplots
 fig, ax = plt.subplots(figsize=(10, 6))
@@ -156,13 +155,10 @@ sns.lineplot(x=np.arange(len(sgd_mse)), y=sgd_mse, ax=ax, label="SGD MSE")
 ax.set_yscale('log')  # Set the y-axis to a logarithmic scale
 
 ax.set_title("Mean Squared Error Comparison")
-ax.set_xlabel("Iterations")
+ax.set_xlabel("Iterations (x 10,000)")
 ax.set_ylabel("Log MSE")
 ax.legend()
 
 plt.tight_layout()
 plt.savefig("mse_comparison_log_weibull.png")
 plt.show()
-
-
-# %%

@@ -17,5 +17,5 @@ PSGD significantly outperforms SGD for non-isotropic data
 PSGD performs the same as SGD for isotropic gaussian data
 <img src="mse_comparison_log.png" width=90% height=90%>
 
-PSGD converges faster than SGD for non-isotropic data -- SGD is taking soooooo long.....
+PSGD converges faster than SGD for non-isotropic data and to a much better solution
 <img src="mse_comparison_log_weibull.png" width=90% height=90%>
