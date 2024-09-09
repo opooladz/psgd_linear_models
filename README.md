@@ -1,12 +1,21 @@
 # psgd_linear_models
 
-consider convergence of psgd vs sgd on liear models
+Consider convergence of psgd vs sgd on liear models for classification and regression tasks
 
 
-psgd performs the same as sgd for isotropic gaussian data
+## Linear BinaryClassification 
+
+PSGD performs the same as SGD for isotropic gaussian data
 <img src="iso_sgd_psgd.png" width=90% height=90%>
 
 
-psgd significantly outperforms sgd for non-isotropic data
+PSGD significantly outperforms SGD for non-isotropic data
 <img src="psgd_sgd_weibull.png" width=90% height=90%>
 
+## Linear Regression
+
+PSGD performs the same as SGD for isotropic gaussian data
+<img src="mse_comparison_log.png" width=90% height=90%>
+
+PSGD converges faster than SGD for non-isotropic data -- SGD is taking soooooo long.....
+<img src="mse_comparison_log_weibull.png" width=90% height=90%>
