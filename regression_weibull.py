@@ -45,6 +45,9 @@ class linearRegression(nn.Module):
     def forward(self, x):
         return self.linear(x).squeeze()
 
+    def to_device(self, device):
+        self.to(device)
+
 # Dataset and DataLoader setup
 class data_set(Dataset):
     def __init__(self, data, labels):
@@ -60,9 +63,14 @@ class data_set(Dataset):
 dataset = data_set(X, y)  # Updated to use new X and y directly
 trainloader = DataLoader(dataset, batch_size=1024, shuffle=True)
 
+# Check for CUDA availability
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f"Using device: {device}")
+
 # set initilization of linearRegression to orthogonal initalization
 
 smallLinear = linearRegression(d)
+smallLinear.to_device(device)  # Move model to the appropriate device
 # torch.nn.init.normal_(smallLinear.linear.weight, mean=0, std=0.01)
 torch.nn.init.orthogonal_(smallLinear.linear.weight, gain=1)
 num_epochs = 200_000
@@ -80,8 +88,8 @@ sgd_mse = []
 # Training Loop
 for epoch in range(num_epochs):
     for batch in trainloader:
-        images = Variable(batch["data"]).float()
-        labels = Variable(batch["label"]).float()
+        images = Variable(batch["data"]).float().to(device)  # Move images to device
+        labels = Variable(batch["label"]).float().to(device)  # Move labels to device
 
         optimizer.zero_grad()
         outputs = model(images) 
@@ -119,8 +127,8 @@ psgd_mse = []
 # Training Loop
 for epoch in range(num_epochs):
     for batch in trainloader:
-        images = Variable(batch["data"]).float()
-        labels = Variable(batch["label"]).float()
+        images = Variable(batch["data"]).float().to(device)  # Move images to device
+        labels = Variable(batch["label"]).float().to(device)  # Move labels to device
 
         outputs = model(images)
         loss = criterion(outputs, labels)
