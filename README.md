@@ -1,2 +1,3 @@
 # psgd_linear_models
-consider convergence of psgd on liear models
+
+consider convergence of psgd vs sgd on liear models
